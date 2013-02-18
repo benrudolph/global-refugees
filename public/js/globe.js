@@ -1,5 +1,6 @@
 var feature;
 var camps;
+var flows;
 
 var projection = d3.geo.azimuthal()
     .scale(380)
@@ -22,12 +23,23 @@ var scale = {
 var path = d3.geo.path()
     .projection(projection);
 
+var width = 1280,
+    height = 800;
+
 var svg = d3.select("#body").append("svg:svg")
-    .attr("width", 1280)
-    .attr("height", 800)
+    .attr("width", width)
+    .attr("height", height)
     .on("mousedown", mousedown);
 
-var radius = d3.scale.linear()
+var r = 380
+
+svg.append("circle")
+    .attr("r", r)
+    .attr("fill", "black")
+    .attr("cx", width / 2)
+    .attr("cy", height / 2)
+
+var radius = d3.scale.log()
     .domain(d3.extent(camp_data, function(d) { return +d.population }))
     .range([1, 10])
 
@@ -35,10 +47,26 @@ d3.json("data/world-countries.json", function(collection) {
   feature = svg.selectAll("path")
       .data(collection.features)
     .enter().append("svg:path")
-      .attr("d", clip);
+      .attr("d", clip)
+      .on("click", function(d) {
+        console.log(d)
+        d3.selectAll(".show")
+            .classed("show", false)
+        d3.selectAll("." + d.id)
+            .classed("show", true)
+
+        d3.selectAll(".selected")
+            .classed("selected", false)
+
+        d3.select(this)
+            .classed("selected", true)
+      })
 
   feature.append("svg:title")
-      .text(function(d) { return d.properties.name; });
+      .text(function(d) {
+        return d.properties.name;
+      })
+
 
   camps = svg.selectAll(".camp")
       .data(camp_data)
@@ -56,6 +84,14 @@ d3.json("data/world-countries.json", function(collection) {
       })
       .attr("cy", function(d) {
         return updateCamp(d)[1]
+      })
+
+  flows = svg.selectAll(".flow")
+      .data(flow_data)
+    .enter().append("svg:path")
+      .attr("d", clip)
+      .attr("class", function(d) {
+        return d.asylum.iso + " flow"
       })
 });
 
@@ -96,6 +132,7 @@ function mouseup() {
 
 function refresh(duration) {
   (duration ? feature.transition().duration(duration) : feature).attr("d", clip);
+  (duration ? flows.transition().duration(duration) : flows).attr("d", clip);
   (duration ? camps.transition().duration(duration) : camps).attr('cx', function(d) {
       return updateCamp(d)[0]
     })

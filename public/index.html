@@ -21,12 +21,35 @@ path {
   fill: #aaa;
   stroke: #fff;
 }
+.flow {
+ fill: none;
+ stroke: black;
+ opacity: .8;
+ display: none;
+  pointer-events: none;
+}
+
+.show {
+  display: block;
+}
+
+.selected {
+  fill: red;
+}
+
+.camp {
+  fill-opacity: .4;
+  stroke-width: 1px;
+  stroke: black;
+  pointer-events: none;
+}
 </style>
 
 
   </head>
   <body>
     <div id="body"></div>
+    <script type="text/javascript" src="data/flows.js"></script>
     <script type="text/javascript" src="data/complete.js"></script>
     <script type="text/javascript" src="js/globe.js"></script>
   </body>
