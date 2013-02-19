@@ -52,8 +52,16 @@ d3.json("data/world-countries.json", function(collection) {
         console.log(d)
         d3.selectAll(".show")
             .classed("show", false)
-        d3.selectAll("." + d.id)
+            .classed("flowin", false)
+            .classed("flowout", false)
+
+        d3.selectAll("." + d.id + "-flowin")
             .classed("show", true)
+            .classed("flowin", true)
+
+        d3.selectAll("." + d.id + "-flowout")
+            .classed("show", true)
+            .classed("flowout", true)
 
         d3.selectAll(".selected")
             .classed("selected", false)
@@ -91,7 +99,7 @@ d3.json("data/world-countries.json", function(collection) {
     .enter().append("svg:path")
       .attr("d", clip)
       .attr("class", function(d) {
-        return d.asylum.iso + " flow"
+        return d.asylum.iso + "-flowin flow " + d.origin.iso + "-flowout"
       })
 });
 
