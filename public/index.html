@@ -7,54 +7,79 @@
     <link type="text/css" rel="stylesheet" href="style.css"/>
     <style>
 
-svg {
-  width: 1280px;
-  height: 800px;
-  pointer-events: all;
-}
+      body {
+        font-family: helvetica neue, "arial";
+        width: 1000px;
+        margin-left: 40px;
+      }
+      h1 {
+        font-weight: 400;
+      }
+      #title {
+        width: 300px;
+      }
+  svg {
+    width: 1280px;
+    height: 800px;
+    pointer-events: all;
+  }
 
-circle {
-  fill: #d6eaff;
-}
+  circle {
+    fill: #d6eaff;
+  }
 
-path {
-  /*fill: #f2e3c5;*/
-  stroke: #000;
-}
-.flow {
- fill: none;
- stroke: black;
- opacity: .8;
- display: none;
-  pointer-events: none;
-}
+  path {
+    /*fill: #f2e3c5;*/
+    stroke: #000;
+  }
+  .flow {
+   fill: none;
+   stroke: black;
+   opacity: .8;
+   display: none;
+    pointer-events: none;
+  }
 
-.flowin {
-  stroke: red;
-}
-.flowout {
-  stroke: blue;
-}
+  .flowin {
+    stroke: red;
+  }
+  .flowout {
+    stroke: blue;
+  }
 
-.show {
-  display: block;
-}
+  .show {
+    display: block;
+  }
 
-.selected {
-  fill: #fbe945;
-}
+  .selected {
+    fill: #fbe945;
+  }
 
-.camp {
-  fill-opacity: .2;
-  fill: red;
-  pointer-events: none;
-}
+  .camp {
+    fill-opacity: .2;
+    fill: red;
+    pointer-events: none;
+  }
+  .leftbar {
+    float: left;
+    width: 300px;
+  }
+  .content {
+    float: left;
+    width: 700px;
+  }
 </style>
 
 
   </head>
   <body>
-    <div id="body"></div>
+    <div class="leftbar">
+      <h1 id="title">Where are refugees originating from?</h1>
+      <div class="legend"><img src="images/legend.png" width="260" /></div>
+    </div>
+    <div class="content">
+      <div id="body"></div>
+    </div>
     <script type="text/javascript" src="data/flows.js"></script>
     <script type="text/javascript" src="data/complete.js"></script>
     <script type="text/javascript" src="data/refugee_populations2.js"></script>

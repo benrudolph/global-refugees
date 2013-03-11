@@ -8,15 +8,17 @@ var z = d3.scale.ordinal()
     .range(colorbrewer.Reds[9]);
 
 
-var velocity = [0.0040, 0.0000];
+var velocity = [0.0050, 0.0000];
 var origin = [-71.03, 25.37]
 var stopRotating = false;
 
+var width = 600,
+    height = 600;
 var projection = d3.geo.azimuthal()
     .scale(r)
     .origin(origin)
     .mode("orthographic")
-    .translate([640, 400]);
+    .translate([width / 2, height / 2]);
 
 var circle = d3.geo.greatCircle()
     .origin(projection.origin());
@@ -33,8 +35,6 @@ var scale = {
 var path = d3.geo.path()
     .projection(projection);
 
-var width = 1280,
-    height = 800;
 
 var svg = d3.select("#body").append("svg:svg")
     .attr("width", width)
@@ -94,7 +94,7 @@ function drawGlobe(collection) {
             bucket = 2
           } else if (pop < 50000) {
             bucket = 3
-          } else if (pop < 110000) {
+          } else if (pop < 100000) {
             bucket = 4
           } else if (pop < 250000) {
             bucket = 5
