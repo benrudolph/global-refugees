@@ -2,9 +2,19 @@ var feature;
 var camps;
 var flows;
 
+var r = 260
+var z = d3.scale.ordinal()
+    .domain([0,1,2,3,4,5,6,7,8])
+    .range(colorbrewer.Reds[9]);
+
+
+var velocity = [0.0040, 0.0000];
+var origin = [-71.03, 25.37]
+var stopRotating = false;
+
 var projection = d3.geo.azimuthal()
-    .scale(380)
-    .origin([-1.03,10.37])
+    .scale(r)
+    .origin(origin)
     .mode("orthographic")
     .translate([640, 400]);
 
@@ -13,11 +23,11 @@ var circle = d3.geo.greatCircle()
 
 // TODO fix d3.geo.azimuthal to be consistent with scale
 var scale = {
-  orthographic: 380,
-  stereographic: 380,
-  gnomonic: 380,
-  equidistant: 380 / Math.PI * 2,
-  equalarea: 380 / Math.SQRT2
+  orthographic: r,
+  stereographic: r,
+  gnomonic: r,
+  equidistant: r / Math.PI * 2,
+  equalarea: r / Math.SQRT2
 };
 
 var path = d3.geo.path()
@@ -31,7 +41,6 @@ var svg = d3.select("#body").append("svg:svg")
     .attr("height", height)
     .on("mousedown", mousedown);
 
-var r = 380
 
 svg.append("circle")
     .attr("r", r)
@@ -43,64 +52,100 @@ var radius = d3.scale.log()
     .domain(d3.extent(camp_data, function(d) { return +d.population }))
     .range([1, 10])
 
-d3.json("data/world-countries.json", function(collection) {
+function drawGlobe(collection) {
   feature = svg.selectAll("path")
-      .data(collection.features)
-    .enter().append("svg:path")
-      .attr("d", clip)
-      .on("click", function(d) {
-        console.log(d)
-        d3.selectAll(".show")
-            .classed("show", false)
-            .classed("flowin", false)
-            .classed("flowout", false)
+        .data(collection.features)
+      .enter().append("svg:path")
+        .attr("d", clip)
+      /*  .on("click", function(d) {
+          console.log(refugee_populations[d.id])
+          d3.selectAll(".show")
+              .classed("show", false)
+              .classed("flowin", false)
+              .classed("flowout", false)
 
-        d3.selectAll("." + d.id + "-flowin")
-            .classed("show", true)
-            .classed("flowin", true)
+          d3.selectAll("." + d.id + "-flowin")
+              .classed("show", true)
+              .classed("flowin", true)
 
-        d3.selectAll("." + d.id + "-flowout")
-            .classed("show", true)
-            .classed("flowout", true)
+          d3.selectAll("." + d.id + "-flowout")
+              .classed("show", true)
+              .classed("flowout", true)
 
-        d3.selectAll(".selected")
-            .classed("selected", false)
+          d3.selectAll(".selected")
+              .classed("selected", false)
 
-        d3.select(this)
-            .classed("selected", true)
-      })
+          d3.select(this)
+              .classed("selected", true)
+        })*/
+        .attr("fill", function(d) {
+          var bucket;
+          var pop = refugee_populations[d.id]
 
-  feature.append("svg:title")
-      .text(function(d) {
-        return d.properties.name;
-      })
+          if (!pop) {
+            return "white"
+          }
+
+          if (pop < 1000) {
+            bucket = 0
+          } else if (pop < 10000) {
+            bucket = 1
+          } else if (pop < 25000) {
+            bucket = 2
+          } else if (pop < 50000) {
+            bucket = 3
+          } else if (pop < 110000) {
+            bucket = 4
+          } else if (pop < 250000) {
+            bucket = 5
+          } else if (pop < 500000) {
+            bucket = 6
+          } else if (pop < 1000000) {
+            bucket = 7
+          } else {
+            bucket = 8
+          }
+          console.log(bucket)
+          return z(bucket);
+        })
+
+    feature.append("svg:title")
+        .text(function(d) {
+          return d.properties.name;
+        })
 
 
-  camps = svg.selectAll(".camp")
-      .data(camp_data)
-    .enter().append("circle")
+    /*camps = svg.selectAll(".camp")
+        .data(camp_data)
+      .enter().append("circle")
 
-  camps.attr("class", "camp")
-      .attr("r", function(d) {
-        if (updateCamp(d)[2] === 0) {
-          return 0
-        }
-        return radius(+d.population)
-      })
-      .attr("cx", function(d) {
-        return updateCamp(d)[0]
-      })
-      .attr("cy", function(d) {
-        return updateCamp(d)[1]
-      })
+    camps.attr("class", "camp")
+        .attr("r", function(d) {
+          if (updateCamp(d)[2] === 0) {
+            return 0
+          }
+          return radius(+d.population)
+        })
+        .attr("cx", function(d) {
+          return updateCamp(d)[0]
+        })
+        .attr("cy", function(d) {
+          return updateCamp(d)[1]
+        })*/
 
-  flows = svg.selectAll(".flow")
-      .data(flow_data)
-    .enter().append("svg:path")
-      .attr("d", clip)
-      .attr("class", function(d) {
-        return d.asylum.iso + "-flowin flow " + d.origin.iso + "-flowout"
-      })
+    /*flows = svg.selectAll(".flow")
+        .data(flow_data)
+      .enter().append("svg:path")
+        .attr("d", clip)
+        .attr("class", function(d) {
+          return d.asylum.iso + "-flowin flow " + d.origin.iso + "-flowout"
+        })*/
+
+}
+
+d3.json("data/world-countries.json", function(collection) {
+  drawGlobe(collection);
+  spin();
 });
 
 d3.select(window)
@@ -116,6 +161,7 @@ var m0,
     o0;
 
 function mousedown() {
+  stopRotating = true;
   m0 = [d3.event.pageX, d3.event.pageY];
   o0 = projection.origin();
   d3.event.preventDefault();
@@ -140,8 +186,8 @@ function mouseup() {
 
 function refresh(duration) {
   (duration ? feature.transition().duration(duration) : feature).attr("d", clip);
-  (duration ? flows.transition().duration(duration) : flows).attr("d", clip);
-  (duration ? camps.transition().duration(duration) : camps).attr('cx', function(d) {
+  //(duration ? flows.transition().duration(duration) : flows).attr("d", clip);
+  /*(duration ? camps.transition().duration(duration) : camps).attr('cx', function(d) {
       return updateCamp(d)[0]
     })
     .attr('cy', function(d) {
@@ -152,7 +198,7 @@ function refresh(duration) {
           return 0
         }
         return radius(+d.population)
-    })
+    })*/
 }
 
 function clip(d) {
@@ -175,3 +221,19 @@ function updateCamp(d) {
   }
   return coords;
 }
+
+
+function spin() {
+        t0 = Date.now();
+        origin = projection.origin();
+        d3.timer(function() {
+            var t = Date.now() - t0;
+            if (t > 500) {
+                var o = [origin[0] + (t - 500) * velocity[0], origin[1] + (t - 500) * velocity[1]];
+                projection.origin(o);
+                circle.origin(o);
+                refresh();
+            }
+            return stopRotating;
+        });
+    }
