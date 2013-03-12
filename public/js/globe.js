@@ -65,6 +65,7 @@ var thresholds = [
 ]
 
 var legendWidth = 300
+var legendHeight = 400
 var bucketHeight = 30;
 var bucketWidth = 30;
 var legend;
@@ -73,6 +74,7 @@ function drawLegend() {
   legend = d3.select("#legend")
     .append("svg")
     .attr("width", legendWidth)
+    .attr("height", legendHeight)
 
 
   legend.selectAll(".bucket")
