@@ -8,7 +8,7 @@ var r = 260
 var z = d3.scale.ordinal()
 
 
-var velocity = [0.0100, 0.0000];
+var velocity = [0.0050, 0.0000];
 var origin = [-71.03, 25.37]
 var stopRotating = false;
 

@@ -88,9 +88,10 @@
     width:40px;
     height:40px;
     border-radius: 15px;
+    float: left;
   }
 
-  #controls:hover {
+  #controls:hover, #toggle:hover {
     background-color: rgb(240,240,240);
   }
 
@@ -105,6 +106,24 @@
     padding-top: 2px;
     padding-left: 40px;
   }
+
+  #toggle {
+    width: 170px;
+    border: 2px black solid;
+    border-radius: 10px;
+    height: 28px;
+    margin-left: 5px;
+    float: left;
+    font-weight: 300;
+    font-size: 16px;
+    text-align: center;
+    padding-top: 8px;
+    cursor: pointer;
+  }
+
+  .toolbar {
+    height: 40px;
+  }
 </style>
 
 
@@ -112,8 +131,10 @@
   <body>
     <div class="leftbar">
       <h1 id="title">Where are refugees <span class="orig">originating</span> from?</h1>
-      <div id="controls"><img width="40" height="40" id="pause" src="images/pause.png" /><img width="40" height="40" id="play" class="gone" src="images/play.png" /></div>
-      <button id="toggle">Country of Residence</button>
+      <div class="toolbar">
+        <div id="controls"><img width="40" height="40" id="pause" src="images/pause.png" /><img width="40" height="40" id="play" class="gone" src="images/play.png" /></div>
+        <div id="toggle">Country of Residence</div>
+      </div>
       <div id="legend"></div>
     </div>
     <div class="content">
