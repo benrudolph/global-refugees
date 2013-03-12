@@ -178,10 +178,10 @@ function drawGlobe(collection, color) {
           return z(bucket);
         })
 
-    /*feature.append("svg:title")
+    feature.append("svg:title")
         .text(function(d) {
           return d.properties.name;
-        })*/
+        })
 
 
     /*camps = svg.selectAll(".camp")
