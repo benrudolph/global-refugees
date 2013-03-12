@@ -271,6 +271,8 @@ var m0,
 
 function mousedown() {
   stopRotating = true;
+  d3.select("#play").classed("gone", false);
+  d3.select("#pause").classed("gone", true);
   m0 = [d3.event.pageX, d3.event.pageY];
   o0 = projection.origin();
   d3.event.preventDefault();
