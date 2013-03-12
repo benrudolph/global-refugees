@@ -41,6 +41,10 @@
     pointer-events: none;
   }
 
+  #legend {
+    margin-top: 25px;
+  }
+
   .flowin {
     stroke: red;
   }
@@ -69,16 +73,23 @@
     float: left;
     width: 700px;
   }
+  .resid {
+    color: #238b45;
+  }
+
+  .orig {
+    color: #cb181d;
+  }
 </style>
 
 
   </head>
   <body>
     <div class="leftbar">
-      <h1 id="title">Where are refugees originating from?</h1>
+      <h1 id="title">Where are refugees <span class="orig">originating</span> from?</h1>
       <button id="play">Play</button>
       <button id="pause">Pause</button>
-      <button id="toggle">CoR</button>
+      <button id="toggle">Country of Residence</button>
       <div id="legend"></div>
     </div>
     <div class="content">
