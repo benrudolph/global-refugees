@@ -1,11 +1,11 @@
 var feature;
 var camps;
 var flows;
+var refugee_populations;
+var isCoO = true;
 
 var r = 260
 var z = d3.scale.ordinal()
-    .domain([0,1,2,3,4,5,6,7,8])
-    .range(colorbrewer.Reds[9]);
 
 
 var velocity = [0.0050, 0.0000];
@@ -52,7 +52,76 @@ var radius = d3.scale.log()
     .domain(d3.extent(camp_data, function(d) { return +d.population }))
     .range([1, 10])
 
-function drawGlobe(collection) {
+var thresholds = [
+  1000,
+  10000,
+  25000,
+  50000,
+  100000,
+  250000,
+  500000,
+  1000000,
+  "Over 1,000,000"
+]
+
+var legendWidth = 300
+var bucketHeight = 30;
+var bucketWidth = 30;
+var legend;
+
+function drawLegend() {
+  legend = d3.select("#legend")
+    .append("svg")
+    .attr("width", legendWidth)
+
+
+  legend.selectAll(".bucket")
+    .data(thresholds)
+    .enter()
+    .append("rect")
+    .attr("x", 10)
+    .attr("y", function(d, i) {
+      return i*bucketHeight;
+    })
+    .attr("width", bucketWidth)
+    .attr("height", bucketHeight)
+    .attr("fill", function(d, i) {
+      return z(thresholds.length - (i + 1));
+    })
+    .attr("rx", 7)
+    .attr("ry", 7)
+    .style("stroke", "black")
+    .attr("class", "bucket")
+
+  legend.selectAll(".label")
+    .data(thresholds)
+    .enter()
+    .append("text")
+    .attr("x", bucketWidth + 30)
+    .attr("y", function(d, i) {
+      return bucketHeight/2 + (i* bucketHeight) + 5;
+    })
+    .text(function(d, i) {
+      console.log(i)
+      console.log(thresholds.length -1)
+      if (i === 0) {
+        return thresholds[thresholds.length - (i + 1)]
+      } else if (i === thresholds.length - 1) {
+        return thresholds[thresholds.length - (i + 1)] + " or less"
+      } else {
+        return thresholds[thresholds.length - (i + 2)] + " to " + thresholds[thresholds.length - (i + 1)]
+      }
+    })
+    .style("font-size", "12px")
+    .attr("class", "legend")
+
+
+}
+
+
+function drawGlobe(collection, color) {
+  z.domain([0,1,2,3,4,5,6,7,8])
+    .range(colorbrewer[color][9]);
   feature = svg.selectAll("path")
         .data(collection.features)
       .enter().append("svg:path")
@@ -86,21 +155,21 @@ function drawGlobe(collection) {
             return "white"
           }
 
-          if (pop < 1000) {
+          if (pop < thresholds[0]) {
             bucket = 0
-          } else if (pop < 10000) {
+          } else if (pop < thresholds[1]) {
             bucket = 1
-          } else if (pop < 25000) {
+          } else if (pop < thresholds[2]) {
             bucket = 2
-          } else if (pop < 50000) {
+          } else if (pop < thresholds[3]) {
             bucket = 3
-          } else if (pop < 100000) {
+          } else if (pop < thresholds[4]) {
             bucket = 4
-          } else if (pop < 250000) {
+          } else if (pop < thresholds[5]) {
             bucket = 5
-          } else if (pop < 500000) {
+          } else if (pop < thresholds[6]) {
             bucket = 6
-          } else if (pop < 1000000) {
+          } else if (pop < thresholds[7]) {
             bucket = 7
           } else {
             bucket = 8
@@ -109,10 +178,10 @@ function drawGlobe(collection) {
           return z(bucket);
         })
 
-    feature.append("svg:title")
+    /*feature.append("svg:title")
         .text(function(d) {
           return d.properties.name;
-        })
+        })*/
 
 
     /*camps = svg.selectAll(".camp")
@@ -140,13 +209,45 @@ function drawGlobe(collection) {
         .attr("class", function(d) {
           return d.asylum.iso + "-flowin flow " + d.origin.iso + "-flowout"
         })*/
+    drawLegend();
 
 }
 
-d3.json("data/world-countries.json", function(collection) {
-  drawGlobe(collection);
+var collection = []
+d3.json("data/world-countries.json", function(c) {
+  collection = c;
+  refugee_populations = CoO;
+
+  drawGlobe(collection, "Reds");
   spin();
 });
+
+d3.select("#play").on("click", function() {
+  stopRotating = false;
+  spin();
+})
+
+d3.select("#pause").on("click", function() {
+  stopRotating = true;
+})
+
+d3.select("#toggle").on("click", function() {
+  feature.remove()
+  legend.remove()
+  var color;
+  if (isCoO) {
+    refugee_populations = CoR;
+    isCoO = false;
+    color = "Greens"
+    d3.select("#title").text("Where are refugees residing?");
+  } else {
+    refugee_populations = CoO;
+    isCoO = true;
+    color = "Reds"
+    d3.select("#title").text("Where are refugees originating from?");
+  }
+  drawGlobe(collection, color);
+})
 
 d3.select(window)
     .on("mousemove", mousemove)
