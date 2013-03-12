@@ -80,6 +80,18 @@
   .orig {
     color: #cb181d;
   }
+  .gone {
+    display: none;
+  }
+  #controls {
+    cursor:pointer;
+    width:40px;
+    height:40px;
+    border-radius: 15px;
+  }
+  #controls:hover {
+    background-color: rgb(240,240,240);
+  }
 </style>
 
 
@@ -87,8 +99,7 @@
   <body>
     <div class="leftbar">
       <h1 id="title">Where are refugees <span class="orig">originating</span> from?</h1>
-      <button id="play">Play</button>
-      <button id="pause">Pause</button>
+      <div id="controls"><img width="40" height="40" id="pause" src="images/pause.png" /><img width="40" height="40" id="play" class="gone" src="images/play.png" /></div>
       <button id="toggle">Country of Residence</button>
       <div id="legend"></div>
     </div>
