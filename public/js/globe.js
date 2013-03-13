@@ -246,13 +246,13 @@ d3.select("#toggle").on("click", function() {
     isCoO = false;
     color = "Greens"
     d3.select("#title").html("Where are refugees <span class=\"resid\">residing</span>?");
-    d3.select(this).text("Country of Origin")
+    d3.select(this).text("Toggle dataset")
   } else {
     refugee_populations = CoO;
     isCoO = true;
     color = "Reds"
     d3.select("#title").html("Where are refugees <span class=\"orig\">originating</span> from?");
-    d3.select(this).text("Country of Residence")
+    d3.select(this).text("Toggle dataset")
   }
   drawGlobe(collection, color);
 })

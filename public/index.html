@@ -83,6 +83,10 @@
     display: none;
   }
 
+  .darker {
+    background-color: rgb(190, 190, 190);
+  }
+
   #controls {
     cursor:pointer;
     width:40px;
@@ -132,8 +136,9 @@
     <div class="leftbar">
       <h1 id="title">Where are refugees <span class="orig">originating</span> from?</h1>
       <div class="toolbar">
-        <div id="controls"><img width="40" height="40" id="pause" src="images/pause.png" /><img width="40" height="40" id="play" class="gone" src="images/play.png" /></div>
-        <div id="toggle">Country of Residence</div>
+        <div id="controls"><img class="control" width="40" height="40" id="pause" src="images/pause.png" /><img
+          width="40" height="40" id="play" class="gone control" src="images/play.png" /></div>
+        <div id="toggle">Toggle dataset</div>
       </div>
       <div id="legend"></div>
     </div>
