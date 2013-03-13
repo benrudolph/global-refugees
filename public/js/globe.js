@@ -69,6 +69,7 @@ var legendHeight = 400
 var bucketHeight = 30;
 var bucketWidth = 30;
 var legend;
+var formatter = d3.format(",");
 
 function drawLegend() {
   legend = d3.select("#legend")
@@ -104,14 +105,12 @@ function drawLegend() {
       return bucketHeight/2 + (i* bucketHeight) + 5;
     })
     .text(function(d, i) {
-      console.log(i)
-      console.log(thresholds.length -1)
       if (i === 0) {
         return thresholds[thresholds.length - (i + 1)]
       } else if (i === thresholds.length - 1) {
-        return thresholds[thresholds.length - (i + 1)] + " or less"
+        return formatter(thresholds[thresholds.length - (i + 1)]) + " or less"
       } else {
-        return thresholds[thresholds.length - (i + 2)] + " to " + thresholds[thresholds.length - (i + 1)]
+        return formatter(thresholds[thresholds.length - (i + 2)]) + " to " + formatter(thresholds[thresholds.length - (i + 1)])
       }
     })
     .style("font-size", "12px")
