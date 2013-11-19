@@ -127,27 +127,27 @@ function drawGlobe(collection, color) {
         .data(collection.features)
       .enter().append("svg:path")
         .attr("d", clip)
-      /*  .on("click", function(d) {
+        .on("click", function(d) {
           console.log(refugee_populations[d.id])
-          d3.selectAll(".show")
-              .classed("show", false)
-              .classed("flowin", false)
-              .classed("flowout", false)
+          //d3.selectAll(".show")
+          //    .classed("show", false)
+          //    .classed("flowin", false)
+          //    .classed("flowout", false)
 
-          d3.selectAll("." + d.id + "-flowin")
-              .classed("show", true)
-              .classed("flowin", true)
+          //d3.selectAll("." + d.id + "-flowin")
+          //    .classed("show", true)
+          //    .classed("flowin", true)
 
-          d3.selectAll("." + d.id + "-flowout")
-              .classed("show", true)
-              .classed("flowout", true)
+          //d3.selectAll("." + d.id + "-flowout")
+          //    .classed("show", true)
+          //    .classed("flowout", true)
 
-          d3.selectAll(".selected")
-              .classed("selected", false)
+          //d3.selectAll(".selected")
+          //    .classed("selected", false)
 
-          d3.select(this)
-              .classed("selected", true)
-        })*/
+          //d3.select(this)
+          //    .classed("selected", true)
+        })
         .attr("fill", function(d) {
           var bucket;
           var pop = refugee_populations[d.id]
@@ -185,31 +185,31 @@ function drawGlobe(collection, color) {
         })
 
 
-    /*camps = svg.selectAll(".camp")
-        .data(camp_data)
-      .enter().append("circle")
+    //camps = svg.selectAll(".camp")
+    //    .data(camp_data)
+    //  .enter().append("circle")
 
-    camps.attr("class", "camp")
-        .attr("r", function(d) {
-          if (updateCamp(d)[2] === 0) {
-            return 0
-          }
-          return radius(+d.population)
-        })
-        .attr("cx", function(d) {
-          return updateCamp(d)[0]
-        })
-        .attr("cy", function(d) {
-          return updateCamp(d)[1]
-        })*/
+    //camps.attr("class", "camp")
+    //    .attr("r", function(d) {
+    //      if (updateCamp(d)[2] === 0) {
+    //        return 0
+    //      }
+    //      return radius(+d.population)
+    //    })
+    //    .attr("cx", function(d) {
+    //      return updateCamp(d)[0]
+    //    })
+    //    .attr("cy", function(d) {
+    //      return updateCamp(d)[1]
+    //    })
 
-    /*flows = svg.selectAll(".flow")
-        .data(flow_data)
-      .enter().append("svg:path")
-        .attr("d", clip)
-        .attr("class", function(d) {
-          return d.asylum.iso + "-flowin flow " + d.origin.iso + "-flowout"
-        })*/
+    //flows = svg.selectAll(".flow")
+    //    .data(flow_data)
+    //  .enter().append("svg:path")
+    //    .attr("d", clip)
+    //    .attr("class", function(d) {
+    //      return d.asylum.iso + "-flowin flow " + d.origin.iso + "-flowout"
+    //    })
     drawLegend();
 
 }
@@ -297,18 +297,18 @@ function mouseup() {
 function refresh(duration) {
   (duration ? feature.transition().duration(duration) : feature).attr("d", clip);
   //(duration ? flows.transition().duration(duration) : flows).attr("d", clip);
-  /*(duration ? camps.transition().duration(duration) : camps).attr('cx', function(d) {
-      return updateCamp(d)[0]
-    })
-    .attr('cy', function(d) {
-      return updateCamp(d)[1]
-    })
-    .attr('r', function(d) {
-        if (updateCamp(d)[2] === 0) {
-          return 0
-        }
-        return radius(+d.population)
-    })*/
+  //(duration ? camps.transition().duration(duration) : camps).attr('cx', function(d) {
+  //    return updateCamp(d)[0]
+  //  })
+  //  .attr('cy', function(d) {
+  //    return updateCamp(d)[1]
+  //  })
+  //  .attr('r', function(d) {
+  //      if (updateCamp(d)[2] === 0) {
+  //        return 0
+  //      }
+  //      return radius(+d.population)
+  //  })
 }
 
 function clip(d) {
